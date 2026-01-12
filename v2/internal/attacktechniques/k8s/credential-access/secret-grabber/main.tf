@@ -47,17 +47,14 @@ locals {
   labels        = merge(local.base_labels, local.custom_labels)
 
   create_namespace  = var.namespace == ""
-  generated_ns_name = format("stratus-red-team-infostealer-%s", random_string.suffix.result)
+  generated_ns_name = format("stratus-red-team-secgrab-%s", random_string.suffix.result)
   namespace         = local.create_namespace ? local.generated_ns_name : var.namespace
 
   node_selector   = jsondecode(var.node_selector)
-  resource_prefix = "stratus-red-team-infostealer"
+  resource_prefix = "stratus-red-team-secgrab"
   tolerations     = jsondecode(var.tolerations)
 }
 
-# Use ~/.kube/config as a configuration file if it exists (with current context).
-# Fallback to using in-cluster configuration
-# see https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs#authentication
 provider "kubernetes" {
   config_path = fileexists(local.kubeconfig_path) ? local.kubeconfig_path : null
 }
